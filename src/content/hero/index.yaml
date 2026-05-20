@@ -1,0 +1,34 @@
+name: 🌻 薛倾Oliver
+title: Oliver的记录盒子
+description: |-
+  不是日记，不是作品集，只是某些时刻想留下点什么。 
+  一些旅途，一些电影，一些饭，还有一些说不清楚的情绪。 
+  心情无法被分类，但可以被记录。 
+  这里是 oliver 的那些起起落落。
+avatar: '@assets/hero/avatar.png'
+location: Hong Kong
+socialLinks:
+  - url: mailto:hello@example.com
+    icon: Email
+    label: Email
+  - url: https://github.com/lauroguedes
+    icon: GitHub
+    label: GitHub
+  - url: https://linkedin.com/in/lauroguedes
+    icon: LinkedIn
+    label: LinkedIn
+  - url: https://twitter.com/leowg
+    icon: Twitter
+    label: X (Twitter)
+  - url: https://bsky.app/profile/lauroguedes.bsky.social
+    icon: Bluesky
+    label: Bluesky
+  - url: https://instagram.com/lauroguedes.dev
+    icon: Instagram
+    label: Instagram
+  - url: https://youtube.com/leowgweb
+    icon: YouTube
+    label: YouTube
+  - url: https://codetips.cloud/u/lauroguedes
+    icon: FolderCode
+    label: CodeTips

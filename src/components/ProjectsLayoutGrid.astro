@@ -1,0 +1,63 @@
+---
+/**
+ * ProjectsLayoutGrid — Default layout
+ * Renders projects grouped by category as stacked sections with card grids.
+ */
+import ProjectCard from "./ProjectCard.astro";
+import type { CollectionEntry } from "astro:content";
+
+interface CategoryGroup {
+  slug: string;
+  title: string;
+  description?: string;
+  icon?: string;
+  projects: CollectionEntry<"projects">[];
+}
+
+interface Props {
+  categoryGroups: CategoryGroup[];
+  uncategorizedProjects: CollectionEntry<"projects">[];
+}
+
+const { categoryGroups, uncategorizedProjects } = Astro.props;
+---
+
+<div class="space-y-16">
+  {categoryGroups.map((category) => (
+    <section>
+      <div class="mb-6">
+        <h2 class="text-3xl font-bold">
+          {category.icon && <span class="mr-2">{category.icon}</span>}
+          {category.title}
+        </h2>
+        {category.description && (
+          <p class="text-base-content/60 mt-1">{category.description}</p>
+        )}
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {category.projects.map((project) => (
+          <ProjectCard project={project} categoryLabel={category.title} />
+        ))}
+      </div>
+    </section>
+  ))}
+
+  {uncategorizedProjects.length > 0 && (
+    <section>
+      <div class="mb-6">
+        <h2 class="text-3xl font-bold">
+          <span class="mr-2">📁</span>Other
+        </h2>
+        <p class="text-base-content/60 mt-1">
+          Projects not assigned to a category.
+        </p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {uncategorizedProjects.map((project) => (
+          <ProjectCard project={project} />
+        ))}
+      </div>
+    </section>
+  )}
+</div>
+

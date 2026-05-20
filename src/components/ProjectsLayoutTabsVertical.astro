@@ -1,0 +1,115 @@
+---
+/**
+ * ProjectsLayoutSidebar
+ * Renders projects with a DaisyUI menu sidebar on the left.
+ * Each category is a menu item; clicking it shows its projects on the right.
+ * Uses client-side JS to toggle visibility.
+ */
+import ProjectCard from "./ProjectCard.astro";
+import type { CollectionEntry } from "astro:content";
+
+interface CategoryGroup {
+  slug: string;
+  title: string;
+  description?: string;
+  icon?: string;
+  projects: CollectionEntry<"projects">[];
+}
+
+interface Props {
+  categoryGroups: CategoryGroup[];
+  uncategorizedProjects: CollectionEntry<"projects">[];
+}
+
+const { categoryGroups, uncategorizedProjects } = Astro.props;
+
+// Merge uncategorized into the tab list if present
+const allTabs = [
+  ...categoryGroups,
+  ...(uncategorizedProjects.length > 0
+    ? [
+        {
+          slug: "_other",
+          title: "Other",
+          description: "Projects not assigned to a category.",
+          icon: "📁",
+          projects: uncategorizedProjects,
+        },
+      ]
+    : []),
+];
+---
+
+<div class="flex flex-col lg:flex-row gap-6">
+  <!-- Sidebar Menu -->
+  <ul class="menu bg-base-200 rounded-box w-full lg:w-64 shrink-0">
+    <li class="menu-title">Categories</li>
+    {allTabs.map((tab, index) => (
+      <li>
+        <button
+          class:list={["sidebar-tab-btn", { "active bg-primary text-primary-content": index === 0 }]}
+          data-target={`panel-${tab.slug}`}
+        >
+          {tab.icon && <span>{tab.icon}</span>}
+          {tab.title}
+          <span class="badge badge-sm badge-ghost">{tab.projects.length}</span>
+        </button>
+      </li>
+    ))}
+  </ul>
+
+  <!-- Content Panels -->
+  <div class="flex-1 min-w-0">
+    {allTabs.map((tab, index) => (
+      <div
+        id={`panel-${tab.slug}`}
+        class:list={["sidebar-tab-panel", { hidden: index !== 0 }]}
+      >
+        <h3 class="text-2xl font-bold mb-1">
+          {tab.icon && <span class="mr-2">{tab.icon}</span>}
+          {tab.title}
+        </h3>
+        {tab.description && (
+          <p class="text-base-content/60 mb-6">{tab.description}</p>
+        )}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {tab.projects.map((project) => (
+            <ProjectCard
+              project={project}
+              categoryLabel={tab.slug !== "_other" ? tab.title : undefined}
+            />
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
+
+<script>
+  document.addEventListener("astro:page-load", () => {
+    const buttons = document.querySelectorAll<HTMLButtonElement>(".sidebar-tab-btn");
+    const panels = document.querySelectorAll<HTMLDivElement>(".sidebar-tab-panel");
+
+    buttons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const target = btn.dataset.target;
+
+        // Toggle active state on buttons
+        buttons.forEach((b) => {
+          b.classList.remove("active", "bg-primary", "text-primary-content");
+        });
+        btn.classList.add("active", "bg-primary", "text-primary-content");
+
+        // Toggle panel visibility
+        panels.forEach((p) => {
+          if (p.id === target) {
+            p.classList.remove("hidden");
+          } else {
+            p.classList.add("hidden");
+          }
+        });
+      });
+    });
+  });
+</script>
+

@@ -1,0 +1,74 @@
+---
+/**
+ * ProjectsLayoutTabsHorizontal
+ * Renders projects using DaisyUI tabs-border with horizontal tabs at the top.
+ * Each category is a tab, its projects shown in a card grid below.
+ */
+import ProjectCard from "./ProjectCard.astro";
+import type { CollectionEntry } from "astro:content";
+
+interface CategoryGroup {
+  slug: string;
+  title: string;
+  description?: string;
+  icon?: string;
+  projects: CollectionEntry<"projects">[];
+}
+
+interface Props {
+  categoryGroups: CategoryGroup[];
+  uncategorizedProjects: CollectionEntry<"projects">[];
+}
+
+const { categoryGroups, uncategorizedProjects } = Astro.props;
+
+// Merge uncategorized into the tab list if present
+const allTabs = [
+  ...categoryGroups,
+  ...(uncategorizedProjects.length > 0
+    ? [
+        {
+          slug: "_other",
+          title: "Other",
+          description: "Projects not assigned to a category.",
+          icon: "📁",
+          projects: uncategorizedProjects,
+        },
+      ]
+    : []),
+];
+---
+
+<div class="tabs tabs-border justify-center">
+  {allTabs.map((tab, index) => (
+    <>
+      <input
+        type="radio"
+        name="projects_tabs_h"
+        class="tab"
+        aria-label={`${tab.icon ?? ""} ${tab.title}`.trim()}
+        checked={index === 0}
+      />
+      <div class="tab-content pt-6">
+        <h3 class="text-2xl font-bold mb-1">
+          {tab.icon && <span class="mr-2">{tab.icon}</span>}
+          {tab.title}
+        </h3>
+        {tab.description && (
+          <p class="text-base-content/60 mb-6">{tab.description}</p>
+        )}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {tab.projects.map((project) => (
+            <ProjectCard
+              project={project}
+              categoryLabel={tab.slug !== "_other" ? tab.title : undefined}
+            />
+          ))}
+        </div>
+      </div>
+    </>
+  ))}
+</div>
+
+
+
