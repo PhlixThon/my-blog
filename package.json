@@ -6,7 +6,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "postinstall": "node scripts/patch-keystatic.cjs"
   },
   "dependencies": {
     "@astrojs/markdoc": "^1.0.3",
