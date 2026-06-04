@@ -3,6 +3,7 @@
  *
  * Bug 1: Keystatic omits redirect_uri from token exchange, causing bad_verification_code
  * Bug 2: GitHub OAuth App doesn't return refresh_token/expires_in, causing validation failure
+ * Bug 3: Authorization URL missing scope parameter, token has no permissions (can't write)
  *
  * This script patches the compiled Keystatic source at build time.
  */
@@ -57,6 +58,20 @@ if (content.includes(replacement2)) {
   console.log('[patch-keystatic] Patch 2 applied: Added default values for OAuth App missing fields.');
 } else {
   console.log('[patch-keystatic] Patch 2 target not found.');
+}
+
+// Patch 3: Add scope=public_repo to GitHub authorization URL
+const target3 = "url.searchParams.set('redirect_uri', `${reqUrl.origin}/api/keystatic/github/oauth/callback`);\n  if (from === '/')";
+const replacement3 = "url.searchParams.set('redirect_uri', `${reqUrl.origin}/api/keystatic/github/oauth/callback`);\n  url.searchParams.set('scope', 'public_repo');\n  if (from === '/')";
+
+if (content.includes("url.searchParams.set('scope', 'public_repo')")) {
+  console.log('[patch-keystatic] Patch 3 (scope) already applied, skipping.');
+} else if (content.includes(target3)) {
+  content = content.replace(target3, replacement3);
+  patched = true;
+  console.log('[patch-keystatic] Patch 3 applied: Added scope=public_repo to authorization URL.');
+} else {
+  console.log('[patch-keystatic] Patch 3 target not found.');
 }
 
 if (patched) {
