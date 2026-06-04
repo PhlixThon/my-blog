@@ -45,9 +45,9 @@ if (content.includes(replacement1)) {
 // Patch 2: Add default values for missing fields from GitHub OAuth App
 const target2 = "const _tokenData = await tokenRes.json();";
 const replacement2 = `const _tokenData = await tokenRes.json();
-  if (typeof _tokenData.expires_in !== 'number') _tokenData.expires_in = 0;
-  if (typeof _tokenData.refresh_token !== 'string') _tokenData.refresh_token = '';
-  if (typeof _tokenData.refresh_token_expires_in !== 'number') _tokenData.refresh_token_expires_in = 0;`;
+  if (typeof _tokenData.expires_in !== 'number') _tokenData.expires_in = 28800;
+  if (typeof _tokenData.refresh_token !== 'string') _tokenData.refresh_token = 'none';
+  if (typeof _tokenData.refresh_token_expires_in !== 'number') _tokenData.refresh_token_expires_in = 15811200;`;
 
 if (content.includes(replacement2)) {
   console.log('[patch-keystatic] Patch 2 (default values) already applied, skipping.');
