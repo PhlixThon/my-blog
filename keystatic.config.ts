@@ -497,7 +497,6 @@ export default config({
           label: "Cover Image",
           directory: "src/assets/blog",
           publicPath: "@assets/blog/",
-          validation: { isRequired: true },
           description: "Blog post cover image",
         }),
         publishDate: fields.date({
