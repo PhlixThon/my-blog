@@ -7,4 +7,3 @@ footerText: Crafted by an Artisan
 footerLinkText: Lauro Guedes
 footerLinkUrl: https://lauroguedes.dev
 ---
-Want to chat? shoot me a dm
