@@ -18,21 +18,21 @@ function formatDate(date: Date) {
 }
 ---
 
-<div class="card image-full shadow-xl hover:shadow-2xl transition-shadow">
-  <figure class="aspect-video">
-    <Image src={post.data.image} alt={post.data.title} />
-  </figure>
-  <div
-    class="card-body rounded-lg justify-end bg-linear-to-b from-primary/80 to-transparent"
-  >
+<div class="card shadow-xl hover:shadow-2xl transition-shadow">
+  {post.data.image && (
+    <figure class="aspect-video">
+      <Image src={post.data.image} alt={post.data.title} />
+    </figure>
+  )}
+  <div class="card-body">
     <h3
-      class="card-title text-base-100-content hover:text-primary-content transition-colors"
+      class="card-title hover:text-primary transition-colors"
     >
       <a href={`/blog/${post.id}`}>{post.data.title}</a>
     </h3>
-    <time class="text-sm text-base-100-content/80">
+    <time class="text-sm text-base-content/60">
       {formatDate(post.data.publishDate)}
     </time>
-    <p class="text-base-100-content/90 line-clamp-2">{post.data.description}</p>
+    <p class="text-base-content/80 line-clamp-2">{post.data.description}</p>
   </div>
 </div>

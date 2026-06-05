@@ -65,7 +65,8 @@ function formatDate(date: Date) {
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {sortedPosts.map((post) => (
             <article class="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow">
-              <figure class="aspect-video">
+              {post.data.image && (
+                <figure class="aspect-video">
                 <Image
                   src={post.data.image}
                   alt={post.data.title}
@@ -74,6 +75,7 @@ function formatDate(date: Date) {
                   height={400}
                 />
               </figure>
+              )}
               <div class="card-body">
                 <time class="text-sm text-base-content/60">
                   {formatDate(post.data.publishDate)}
